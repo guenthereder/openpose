@@ -84,7 +84,11 @@ namespace op
                 else if (castedKey=='b')
                 {
                     for (auto& renderer : renderers)
+                    {
+                        if(renderer == nullptr)
+                           continue;
                         renderer->setBlendOriginalFrame(!renderer->getBlendOriginalFrame());
+                    }
                 }
                 // ------------------------- OpenPose-Related ------------------------- //
                 // Modifying thresholds
@@ -137,13 +141,21 @@ namespace op
                 // Show googly eyes
                 else if (castedKey=='g')
                     for (auto& renderer : renderers)
+                    {
+                        if(renderer == nullptr)
+                           continue;
                         renderer->setShowGooglyEyes(!renderer->getShowGooglyEyes());
+                    }
                 // ------------------------- OpenPose-Related ------------------------- //
                 else if (castedKey==',' || castedKey=='.')
                 {
                     const auto increment = (castedKey=='.' ? 1 : -1);
                     for (auto& renderer : renderers)
+                    {
+                        if(renderer == nullptr)
+                           continue;
                         renderer->increaseElementToRender(increment);
+                    }
                 }
                 else
                 {
@@ -167,7 +179,11 @@ namespace op
                             elementToRender = ElementToRender::Skeleton;
                         }
                         for (auto& renderer : renderers)
+                        {
+                            if(renderer == nullptr)
+                               continue;
                             renderer->setElementToRender(elementToRender);
+                        }
                     }
 
                     // Heatmap visualization
@@ -179,7 +195,11 @@ namespace op
                         const auto newElementToRender = key2partHeatmaps.find(castedKey);
                         if (newElementToRender != std::string::npos)
                             for (auto& renderer : renderers)
+                            {
+                                if(renderer == nullptr)
+                                    continue;
                                 renderer->setElementToRender(int(newElementToRender+key2part.size()));
+                            }
                     }
                 }
             }

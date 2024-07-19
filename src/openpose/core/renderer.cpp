@@ -59,6 +59,11 @@ namespace op
     {
         try
         {
+            if (spElementToRender == nullptr || spNumberElementsToRender == nullptr)
+            {
+               error("spElementToRender or spNumberElementsToRender is null.", __LINE__, __FUNCTION__, __FILE__);
+               return;
+            }
             *spElementToRender = elementToRender % *spNumberElementsToRender;
         }
         catch (const std::exception& e)
@@ -71,6 +76,11 @@ namespace op
     {
         try
         {
+            if (spElementToRender == nullptr)
+            {
+                error("spElementToRender is null.", __LINE__, __FUNCTION__, __FILE__);
+                return;
+            }
             if (elementToRender == ElementToRender::Skeleton)
                 *spElementToRender = 0;
             else if (elementToRender == ElementToRender::Background)

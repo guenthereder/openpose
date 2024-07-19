@@ -1,3 +1,10 @@
+cmake_minimum_required(VERSION 3.21)  # Ensure a recent version of CMake is used
+cmake_policy(SET CMP0167 NEW)         # Set the policy for FindBoost module
+
+set(CMAKE_CXX_STANDARD 14)            # Use C++14
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 ### VERSION INFO
 set(OpenPose_VERSION_MAJOR 1)
 set(OpenPose_VERSION_MINOR 7)
@@ -65,6 +72,10 @@ else (${CMAKE_BUILD_TYPE_KNOWN})
 endif (${CMAKE_BUILD_TYPE_KNOWN})
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Release" "Debug" "MinSizeRel" "RelWithDebInfo")
 
+set(FLAGS "${FLAGS} -DCPU_ONLY")
+set(CPU_ONLY ON)
+set(USE_CUDA OFF)
+set(USE_CUDNN OFF)
 
 ### FLAGS
 if (WIN32)
@@ -99,11 +110,11 @@ if (WIN32)
   set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG:incremental /OPT:REF /OPT:ICF")
 elseif (UNIX)
   # Turn on C++11
-  add_definitions(-std=c++11)
+  add_definitions(-std=c++14)
   set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 elseif (APPLE)
   # Turn on C++11
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
   set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 endif (WIN32)
 
@@ -194,7 +205,7 @@ endif (${DL_FRAMEWORK} MATCHES "CAFFE" OR ${DL_FRAMEWORK} MATCHES "NV_CAFFE")
 if (APPLE)
   set(GPU_MODE CPU_ONLY CACHE STRING "Select the acceleration GPU library or CPU otherwise.")
 else (APPLE)
-  set(GPU_MODE CUDA CACHE STRING "Select the acceleration GPU library or CPU otherwise.")
+   #set(GPU_MODE CUDA CACHE STRING "Select the acceleration GPU library or CPU otherwise.")
 endif (APPLE)
 # Display proper options to user
 # if (CUDA_FOUND AND OpenCL_FOUND)
@@ -211,7 +222,7 @@ set_property(CACHE GPU_MODE PROPERTY STRINGS CUDA OPENCL CPU_ONLY)
 # Look for CUDA
 set(CUDA_FOUND FALSE)
 if (${GPU_MODE} MATCHES "CUDA")
-  find_package(CUDA)
+   #find_package(CUDA)
 endif (${GPU_MODE} MATCHES "CUDA")
 # Look for OpenCL
 set(OpenCL_FOUND FALSE)
@@ -509,9 +520,9 @@ if (UNIX OR APPLE)
     set(CUDA_NVCC_FLAGS_DEBUG "${CUDA_NVCC_FLAGS_DEBUG} -D_DEBUG -g")
 
     if (NOT CUDA_FOUND)
-      message(STATUS "CUDA not found.")
-      execute_process(COMMAND cat install_cuda.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/scripts/ubuntu)
-      message(FATAL_ERROR "Install CUDA using the above commands.")
+      #message(STATUS "CUDA not found.")
+      #execute_process(COMMAND cat install_cuda.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/scripts/ubuntu)
+      #message(FATAL_ERROR "Install CUDA using the above commands.")
     endif (NOT CUDA_FOUND)
 
     if (USE_CUDNN AND NOT CUDNN_FOUND)
